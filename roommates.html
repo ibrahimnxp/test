@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Available Roommates - HostelHub FUNAAB</title>
+  <script src="https://unpkg.com/tabletop@1.6.0/tabletop.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1f2937;
+    }
+
+    .roommate-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    .roommate-card h3 {
+      margin-top: 0;
+      color: #1d4ed8;
+    }
+
+    .roommate-card p {
+      margin: 6px 0;
+      color: #374151;
+    }
+
+    .whatsapp-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #10b981;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #059669;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>People Looking for Roommates</h2>
+
+  <div id="roommateList"></div>
+
+  <script>
+    const publicSpreadsheetURL = 'https://docs.google.com/spreadsheets/d/1tAFav2lqkVBbM9MPIJ-2wt7yvd5Mpu97HYYIZJvdfwA/pubhtml';
+
+    function fetchRoommatesData() {
+      Tabletop.init({
+        key: publicSpreadsheetURL,
+        callback: showRoommates,
+        simpleSheet: true
+      });
+    }
+
+    function showRoommates(data) {
+      const container = document.getElementById("roommateList");
+      container.innerHTML = "";
+      data.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "roommate-card";
+        card.innerHTML = `
+          <h3>${item.Name} - ${item.Level}</h3>
+          <p><strong>Department:</strong> ${item.Department}</p>
+          <p><strong>Religion:</strong> ${item.PersonalReligion}</p>
+          <p><strong>Preferred Religion:</strong> ${item.PreferredReligion}</p>
+          <p><strong>Preferred Level:</strong> ${item.PreferredLevel}</p>
+          <p><strong>Preferred Gender:</strong> ${item.PreferredGender}</p>
+          <p><strong>Hostel Location:</strong> ${item.HostelLocation}</p>
+          <p><strong>Price:</strong> ₦${item.HostelPrice}</p>
+          <p><strong>Payment Schedule:</strong> ${item.PaymentSchedule}</p>
+          <a class="whatsapp-btn" href="https://wa.me/${item.WhatsAppContact}" target="_blank">
+            Contact on WhatsApp
+          </a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchRoommatesData);
+  </script>
+</body>
+</html>
